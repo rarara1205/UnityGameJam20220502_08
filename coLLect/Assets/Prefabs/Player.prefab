@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282151676698268154}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1030879, y: -7.1148643, z: 13.242172}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -66,10 +66,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  jumpSpeed: 5
-  gravity: 1
-  jumpHeight: 0
+  jumpSpeed: 10
+  gravity: 9.8
+  jumpHeight: 3
   ground: {fileID: 257761222}
+  jumpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.046204068
+      outSlope: -0.046204068
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.34871864
+    - serializedVersion: 3
+      time: 0.22680493
+      value: 0.5955632
+      inSlope: -4.6781335
+      outSlope: -4.6781335
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07568625
+      outWeight: 0.19863507
+    - serializedVersion: 3
+      time: 0.27
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!135 &7456069643234134021
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -109,8 +142,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1741129938580581012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.546, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -0.63, z: 0}
+  m_LocalScale: {x: 1, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6217593584436198964}
