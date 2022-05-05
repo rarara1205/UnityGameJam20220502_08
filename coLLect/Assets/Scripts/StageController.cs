@@ -9,6 +9,7 @@ public class StageController : MonoBehaviour
     public CameraController cameraController;
     public GameObject gameOverObj;
     public GameObject gameClearObj;
+    public GameObject[] LImages;
 
     private GameObject p;
     private Player player;
@@ -19,6 +20,7 @@ public class StageController : MonoBehaviour
     {
         gameOverObj.SetActive(false);
         gameClearObj.SetActive(false);
+        for (int i = 0; i < LImages.Length; i++) LImages[i].SetActive(false);
         p = Instantiate(playerObj, warpPoint[0].transform.position, Quaternion.identity);
         player = p.GetComponent<Player>();
         GManager.instance.currentStageNum = 0;
@@ -42,6 +44,12 @@ public class StageController : MonoBehaviour
             p.transform.position = warpPoint[GManager.instance.currentStageNum].transform.position;
             player.isContinue = false;
         }
+
+        if (GManager.instance.isAddLNum)
+        {
+            LImages[GManager.instance.collectedLNum - 1].SetActive(true);
+            GManager.instance.isAddLNum = false;
+        } 
     }
 
     public void Warp(int warpStageNum)
