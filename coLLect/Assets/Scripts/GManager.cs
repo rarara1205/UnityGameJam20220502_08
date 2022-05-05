@@ -12,6 +12,7 @@ public class GManager : MonoBehaviour
     public int defaultHpNum;
     [HideInInspector] public bool isGameOver = false;
     [HideInInspector] public bool isGameClear = false;
+    [HideInInspector] public bool isAddLNum = false;
 
     private void Awake()
     {
@@ -29,9 +30,9 @@ public class GManager : MonoBehaviour
     public void AddLNum()
     {
         collectedLNum++;
+        isAddLNum = true;
         if (collectedLNum == 4)
         {
-            Debug.Log("gameclear");
             isGameClear = true;
         }
     }
