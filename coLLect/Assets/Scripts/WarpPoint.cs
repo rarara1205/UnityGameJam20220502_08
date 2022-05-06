@@ -12,7 +12,7 @@ public class WarpPoint : MonoBehaviour
     {
         if (playerTriggerCheck.isOn)
         {
-            stageController.Warp(warpStageNum);
+            stageController.StartWarp(warpStageNum);
         }
     }
 }

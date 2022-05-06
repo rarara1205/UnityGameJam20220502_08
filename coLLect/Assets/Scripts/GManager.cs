@@ -13,6 +13,7 @@ public class GManager : MonoBehaviour
     [HideInInspector] public bool isGameOver = false;
     [HideInInspector] public bool isGameClear = false;
     [HideInInspector] public bool isAddLNum = false;
+    [HideInInspector] public bool isWarping = false;
 
     private void Awake()
     {

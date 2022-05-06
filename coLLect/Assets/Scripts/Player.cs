@@ -44,12 +44,16 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(!GManager.instance.isGameOver && !GManager.instance.isGameClear)
+        if(!GManager.instance.isGameOver && !GManager.instance.isGameClear && !GManager.instance.isWarping)
         {
             GetXZSpeed();
             GetYSpeed();
             rb.velocity = new Vector3(xSpeed, ySpeed, zSpeed);
             IRotate();
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
         }
     }
 
