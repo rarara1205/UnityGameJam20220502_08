@@ -15,6 +15,7 @@ public class StageController : MonoBehaviour
     private Player player;
     private bool doGameOver = false;
     private bool doGameClear = false;
+    private float timer = 0f;
 
     void Awake()
     {
@@ -49,14 +50,40 @@ public class StageController : MonoBehaviour
         {
             LImages[GManager.instance.collectedLNum - 1].SetActive(true);
             GManager.instance.isAddLNum = false;
-        } 
+        }
+
+        if (GManager.instance.isWarping)
+        {
+            UpdateWarp();
+        }
     }
 
-    public void Warp(int warpStageNum)
+    public void StartWarp(int warpStageNum)
     {
+        GManager.instance.isWarping = true;
+        timer = 0f;
         p.transform.position = warpPoint[warpStageNum].transform.position;
-        GManager.instance.currentStageNum = warpStageNum;
         cameraController.ChangeCamera(warpStageNum);
         if(warpStageNum != 0) cameraController.FollowPlayer(p.transform);
+        GManager.instance.currentStageNum = warpStageNum;
+    }
+
+    private void UpdateWarp()
+    {
+        if(timer < 2f)
+        {
+            //p.transform.Find("Spere").Renderer.material.SetFloat("_Dissolve_Time", timer);
+            //p.transform.Find("Cube").Renderer.material.SetFloat("_Dissolve_Time", timer);
+        }
+        else
+        {
+            CompleteWarp();
+        }
+        timer += Time.deltaTime;
+    }
+
+    private void CompleteWarp()
+    {
+        GManager.instance.isWarping=false;
     }
 }
