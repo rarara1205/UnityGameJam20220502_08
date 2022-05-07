@@ -5,8 +5,15 @@ using UnityEngine.UI;
 
 public class FadeImage : MonoBehaviour
 {
-    public bool firstFadeInComplete;
+    public bool firstFadeInComplete = false;
+    public bool fadeInAll = false;
+    public bool fadeOutAll = false;
+    public GameObject BGM;
+    public float audioVolumeMax = 1f;
+    public bool titleFade = false;
+    public float fadeTime = 1f;
 
+    private AudioSource audioSource;
     private Image fadeImage = null;
     private int frameCount = 0;
     private float timer = 0.0f;
@@ -19,6 +26,8 @@ public class FadeImage : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = BGM.GetComponent<AudioSource>();
+        GManager.instance.isWaiting = true;
         fadeImage = GetComponent<Image>();
         if (firstFadeInComplete) FadeInComplete();
         else StartFadeIn();
@@ -27,12 +36,20 @@ public class FadeImage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(frameCount > 2)
+        if (!titleFade)
         {
-            if (fadeIn) FadeInUpdate();
+            if (frameCount > 2)
+            {
+                if (fadeIn) FadeInUpdate();
+                else if (fadeOut) FadeOutUpdate();
+            }
+            frameCount++;
+        }
+        else
+        {
+            if(fadeIn) FadeInUpdate();
             else if (fadeOut) FadeOutUpdate();
         }
-        frameCount++;
     }
 
 
@@ -43,6 +60,7 @@ public class FadeImage : MonoBehaviour
             return;
         }
 
+        audioSource.volume = 0f;
         fadeIn = true;
         compFadeIn = false;
         timer = 0.0f;
@@ -64,12 +82,14 @@ public class FadeImage : MonoBehaviour
             return;
         }
 
+        audioSource.volume = audioVolumeMax;
         fadeOut = true;
         compFadeOut = false;
         timer = 0.0f;
         fadeImage.color = new Color(1, 1, 1, 0);
         fadeImage.fillOrigin = (int)Image.OriginHorizontal.Left;
-        fadeImage.fillAmount = 0;
+        if(fadeOutAll)fadeImage.fillAmount = 1;
+        else fadeImage.fillAmount = 0;
         fadeImage.raycastTarget = true;
     }
 
@@ -81,10 +101,15 @@ public class FadeImage : MonoBehaviour
 
     private void FadeInUpdate()
     {
-        if(timer < 1f)
+        if(timer < fadeTime)
         {
-            fadeImage.color = new Color(1, 1, 1, 1);
-            fadeImage.fillAmount = 1 - timer;
+            audioSource.volume = timer/fadeTime;
+            if (!fadeInAll)
+            {
+                fadeImage.color = new Color(1, 1, 1, 1);
+                fadeImage.fillAmount = 1 - timer;
+            }
+            else fadeImage.color = new Color(1, 1, 1, 1 - timer);
         }
         else
         {
@@ -95,10 +120,15 @@ public class FadeImage : MonoBehaviour
 
     private void FadeOutUpdate()
     {
-        if (timer < 1f)
+        if (timer < fadeTime)
         {
-            fadeImage.color = new Color(1, 1, 1, 1);
-            fadeImage.fillAmount = timer;
+            audioSource.volume = 1f - timer/fadeTime;
+            if (!fadeOutAll)
+            {
+                fadeImage.color = new Color(1, 1, 1, 0);
+                fadeImage.fillAmount = timer;
+            }
+            else fadeImage.color = new Color(1, 1, 1, timer);
         }
         else
         {
@@ -109,18 +139,21 @@ public class FadeImage : MonoBehaviour
 
     private void FadeInComplete()
     {
+        audioSource.volume = 1f;
         fadeImage.color = new Color(1, 1, 1, 0);
-        fadeImage.fillAmount = 0;
+        if(!fadeInAll) fadeImage.fillAmount = 0;
         fadeImage.raycastTarget = false;
         timer = 0f;
         fadeIn = false;
         compFadeIn = true;
+        GManager.instance.isWaiting = false;
     }
 
     private void FadeOutComplete()
     {
+        audioSource.volume = 0f;
         fadeImage.color = new Color(1, 1, 1, 1);
-        fadeImage.fillAmount = 1;
+        if(!fadeOutAll) fadeImage.fillAmount = 1;
         fadeImage.raycastTarget = false;
         timer = 0f;
         fadeOut = false;

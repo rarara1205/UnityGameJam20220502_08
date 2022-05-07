@@ -5,10 +5,24 @@ using UnityEngine;
 public class Rotate : MonoBehaviour
 {
     public Vector3 rotateVector;
+    //public bool rbRotation = false;
+
+    //private Rigidbody rb;
+
+    //private void Start()
+    //{
+    //    if (rbRotation) {
+    //        rb = GetComponent<Rigidbody>();
+    //        rb.angularVelocity = rotateVector;
+    //    }
+    //}
 
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(rotateVector);
+        //if (!rbRotation)
+        //{
+            transform.Rotate(rotateVector);
+        //}
     }
 }

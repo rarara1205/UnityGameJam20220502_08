@@ -11,10 +11,11 @@ public class Player : MonoBehaviour
     public float jumpHeight;
     public GroundCheck ground;
     public AnimationCurve jumpCurve;
+    public AudioClip jumpClip;
+    public AudioClip downClip;
     [HideInInspector] public bool isContinue = false;
 
     private Rigidbody rb = null;
-    private Vector3 oldPos;
     private bool isGround = false;
     private bool isJumping = false;
     private float jumpPos = 0.0f;
@@ -25,13 +26,14 @@ public class Player : MonoBehaviour
     private float ySpeed = 0.0f;
     private float zSpeed = 0.0f;
     private float jumpTime;
-    private string enemyTag = "Enemy";
+    //private SphereCollider spCol = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        oldPos = GetComponent<Transform>().position;
         rb = GetComponent<Rigidbody>();
+        
+        //spCol = GetComponent<SphereCollider>();
     }
 
     // Update is called once per frame
@@ -44,11 +46,11 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(!GManager.instance.isGameOver && !GManager.instance.isGameClear && !GManager.instance.isWarping)
+        if(!GManager.instance.isGameOver && !GManager.instance.isGameClear && !GManager.instance.isWaiting)
         {
             GetXZSpeed();
             GetYSpeed();
-            rb.velocity = new Vector3(xSpeed, ySpeed, zSpeed);
+            rb.velocity = new Vector3(xSpeed, ySpeed, zSpeed) + ground.addVelocity;
             IRotate();
         }
         else
@@ -59,7 +61,12 @@ public class Player : MonoBehaviour
 
     private void GetXZSpeed()
     {
-        Vector3 keyVector = new Vector3(horizontalKey, 0, verticalKey).normalized;
+        Vector3 keyVector = new Vector3(horizontalKey, 0, verticalKey);
+        if(keyVector.magnitude >= 1)
+        {
+            keyVector.Normalize();
+        }
+        Debug.Log(keyVector.magnitude);
         xSpeed = keyVector.x * moveSpeed;
         zSpeed = keyVector.z * moveSpeed;
     }
@@ -74,6 +81,10 @@ public class Player : MonoBehaviour
         {
             if (jumpKey)
             {
+                if (!isJumping)
+                {
+                    GManager.instance.PlaySE(jumpClip);
+                }
                 ySpeed = jumpSpeed;
                 jumpPos = transform.position.y;
                 isJumping = true;
@@ -107,18 +118,21 @@ public class Player : MonoBehaviour
 
     private void IRotate()
     {
-        Vector3 diff = transform.position - oldPos;
-        diff.y = 0f;
+        Vector3 diff = new Vector3(xSpeed, 0f, zSpeed);
         if (diff.magnitude > 0.01f)
         {
             transform.rotation = Quaternion.LookRotation(diff);
         }
-        oldPos = transform.position;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.tag == enemyTag)
+        //if((collision.collider.tag == groundTag || collision.collider.tag == moveFloorTag) && collision.contacts[0].point.y < transform.position.y - spCol.radius * 0.9f )
+        //{
+        //    Debug.Log("aaa");
+        //    transform.position += Vector3.up * 0.1f;
+        //}
+        if(collision.collider.tag == GManager.instance.enemyTag)
         {
             GManager.instance.SubHpNum();
             if (!GManager.instance.isGameOver)
