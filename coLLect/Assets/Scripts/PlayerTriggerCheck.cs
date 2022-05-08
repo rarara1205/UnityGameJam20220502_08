@@ -5,11 +5,10 @@ using UnityEngine;
 public class PlayerTriggerCheck : MonoBehaviour
 {
     [HideInInspector] public bool isOn = false;
-    private string playerTag = "Player";
 
     private void OnTriggerEnter(Collider collision)
     {
-        if(collision.tag == playerTag)
+        if(collision.tag == GManager.instance.playerTag)
         {
             isOn = true;
         }
@@ -17,7 +16,7 @@ public class PlayerTriggerCheck : MonoBehaviour
 
     private void OnTriggerExit(Collider collision)
     {
-        if(collision.tag == playerTag)
+        if(collision.tag == GManager.instance.playerTag)
         {
             isOn = false;
         }

@@ -10,10 +10,16 @@ public class GManager : MonoBehaviour
     public int collectedLNum;
     public int hpNum;
     public int defaultHpNum;
+    public string playerTag = "Player";
+    public string groundTag = "Ground";
+    public string moveFloorTag = "MoveFloor";
+    public string enemyTag = "Enemy";
+    //public string fallFloorTag = "FallFloor";
     [HideInInspector] public bool isGameOver = false;
     [HideInInspector] public bool isGameClear = false;
     [HideInInspector] public bool isAddLNum = false;
-    [HideInInspector] public bool isWarping = false;
+    [HideInInspector] public bool isWaiting = false;
+    [HideInInspector] AudioSource audioSource;
 
     private void Awake()
     {
@@ -28,11 +34,16 @@ public class GManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     public void AddLNum()
     {
         collectedLNum++;
         isAddLNum = true;
-        if (collectedLNum == 4)
+        if (collectedLNum == 3)
         {
             isGameClear = true;
         }
@@ -41,7 +52,7 @@ public class GManager : MonoBehaviour
     public void SubHpNum()
     {
         hpNum--;
-        if(hpNum <= 0) isGameOver = true;
+        if (hpNum < 1) isGameOver = true;
     }
 
     public void RetryGame()
@@ -52,5 +63,10 @@ public class GManager : MonoBehaviour
         currentStageNum = 0;
         time = 0f;
         collectedLNum = 0;
+    }
+
+    public void PlaySE(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
     }
 }

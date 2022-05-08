@@ -14,7 +14,7 @@ public class Hp : MonoBehaviour
     void Start()
     {
         GManager.instance.hpNum = GManager.instance.defaultHpNum;
-        hpDivNum = 1f * 1 / GManager.instance.defaultHpNum;
+        hpDivNum = 1f / (float)GManager.instance.defaultHpNum;
         oldLifeNum = GManager.instance.defaultHpNum;
     }
 

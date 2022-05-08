@@ -12,7 +12,11 @@ public class WarpPoint : MonoBehaviour
     {
         if (playerTriggerCheck.isOn)
         {
-            stageController.StartWarp(warpStageNum);
+            if (!GManager.instance.isWaiting)
+            {
+                stageController.StartWarp(warpStageNum);
+                GManager.instance.isWaiting = true;
+            }
         }
     }
 }
