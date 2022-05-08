@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class FadeImage : MonoBehaviour
 {
-    public bool firstFadeInComplete = false;
-    public bool fadeInAll = false;
-    public bool fadeOutAll = false;
+    public bool firstFadeInComplete;
+    public bool fadeInAll;
+    public bool fadeOutAll;
     public GameObject BGM;
     public float audioVolumeMax = 1f;
-    public bool titleFade = false;
+    public bool titleFade;
     public float fadeTime = 1f;
 
     private AudioSource audioSource;
@@ -40,6 +40,7 @@ public class FadeImage : MonoBehaviour
         {
             if (frameCount > 2)
             {
+                Debug.Log(titleFade);
                 if (fadeIn) FadeInUpdate();
                 else if (fadeOut) FadeOutUpdate();
             }
@@ -103,32 +104,33 @@ public class FadeImage : MonoBehaviour
     {
         if(timer < fadeTime)
         {
-            audioSource.volume = timer/fadeTime;
+            audioSource.volume = timer/fadeTime * audioVolumeMax;
             if (!fadeInAll)
             {
                 fadeImage.color = new Color(1, 1, 1, 1);
-                fadeImage.fillAmount = 1 - timer;
+                fadeImage.fillAmount = 1 - timer/fadeTime;
             }
-            else fadeImage.color = new Color(1, 1, 1, 1 - timer);
+            else fadeImage.color = new Color(1, 1, 1, 1 - timer/fadeTime);
         }
         else
         {
             FadeInComplete();
         }
-        timer += Time.deltaTime;
+        timer += Time.deltaTime/fadeTime;
     }
 
     private void FadeOutUpdate()
     {
         if (timer < fadeTime)
         {
-            audioSource.volume = 1f - timer/fadeTime;
+            audioSource.volume = audioVolumeMax - timer/fadeTime * audioVolumeMax;
             if (!fadeOutAll)
             {
-                fadeImage.color = new Color(1, 1, 1, 0);
-                fadeImage.fillAmount = timer;
+                fadeImage.color = new Color(1, 1, 1, 1);
+                fadeImage.fillAmount = timer/fadeTime;
             }
-            else fadeImage.color = new Color(1, 1, 1, timer);
+            else fadeImage.color = new Color(1, 1, 1, timer/fadeTime);
+            Debug.Log(timer);
         }
         else
         {
@@ -139,7 +141,7 @@ public class FadeImage : MonoBehaviour
 
     private void FadeInComplete()
     {
-        audioSource.volume = 1f;
+        audioSource.volume = audioVolumeMax;
         fadeImage.color = new Color(1, 1, 1, 0);
         if(!fadeInAll) fadeImage.fillAmount = 0;
         fadeImage.raycastTarget = false;

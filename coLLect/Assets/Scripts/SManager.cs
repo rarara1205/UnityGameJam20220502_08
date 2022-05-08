@@ -47,6 +47,7 @@ public class SManager : MonoBehaviour
     {
         if (fade.IsFadeOutComplete() && pressPlay)
         {
+            Debug.Log("fadeoutcomp");
             SceneManager.LoadScene("Game");
             pressPlay = false;
         }

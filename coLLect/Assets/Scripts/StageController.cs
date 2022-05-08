@@ -13,6 +13,8 @@ public class StageController : MonoBehaviour
     [HideInInspector]public Player player;
     public GameObject moveFloorObj;
     public float continueTime = 2.0f;
+    public AudioClip warpLeaveClip;
+    public AudioClip warpArriveClip;
 
     private GameObject p;
     private bool doGameOver = false;
@@ -43,13 +45,20 @@ public class StageController : MonoBehaviour
     {
         if (GManager.instance.isGameOver && !doGameOver)
         {
+            foreach (Transform child in gameOverObj.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
             gameOverObj.SetActive(true);
             doGameOver = true;
         }
         else if (GManager.instance.isGameClear && !doGameClear)
         {
+            foreach (Transform child in gameClearObj.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
             gameClearObj.SetActive(true);
-            naichilab.RankingLoader.Instance.SendScoreAndShowRanking(GManager.instance.time);
             doGameClear = true;
         }
         else if (player.isContinue || isContinueWaiting)
@@ -75,6 +84,7 @@ public class StageController : MonoBehaviour
 
     public void StartWarp(int warpStageNum)
     {
+        GManager.instance.PlaySE(warpLeaveClip);
         GManager.instance.currentStageNum = warpStageNum;
         timer = 0f;
         warpLeave = true;
@@ -155,6 +165,7 @@ public class StageController : MonoBehaviour
         rb.MovePosition(warpPoint[warpStageNum].transform.position);
         cameraController.ChangeCamera(warpStageNum);
         if (warpStageNum != 0) cameraController.FollowPlayer(p.transform);
+        GManager.instance.PlaySE(warpArriveClip);
         warpArrive = true;
     }
 

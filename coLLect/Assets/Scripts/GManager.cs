@@ -52,7 +52,7 @@ public class GManager : MonoBehaviour
     public void SubHpNum()
     {
         hpNum--;
-        if (hpNum <= 0) isGameOver = true;
+        if (hpNum < 1) isGameOver = true;
     }
 
     public void RetryGame()

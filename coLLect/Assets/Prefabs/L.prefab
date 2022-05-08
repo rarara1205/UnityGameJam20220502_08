@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTriggerCheck: {fileID: 1724508823752380248}
+  getLItemClip: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
 --- !u!114 &1724508823752380248
 MonoBehaviour:
   m_ObjectHideFlags: 0
